@@ -1,7 +1,6 @@
 package ru.netology.selenium.db;
 
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanHandler;
 import ru.netology.selenium.domain.AuthCode;
 import ru.netology.selenium.domain.User;
 
@@ -15,26 +14,99 @@ public class DbInteractionDbUtils {
     private static String USER = "app";
     private static String PASSWORD = "9mREsvXDs9Gk89Ef";
 
-    public static User getUserByLogin(String login) throws SQLException {
-        String usersSQL = String.format("SELECT * FROM users WHERE login='%s';", login);
-        QueryRunner runner = new QueryRunner();
+    public static void prepareUser(User user, AuthCode authCode) {
+        try {
+            String insertUser = "INSERT INTO users(id, login, password, status) VALUES (?, ?, ?, ?);";
+            String insertAuthCode = "INSERT INTO auth_codes(id, user_id, code, created) VALUES (?, ?, ?, ?);";
+            QueryRunner runner = new QueryRunner();
 
-        try (
-                Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-        ) {
-            return runner.query(conn, usersSQL, new BeanHandler<>(User.class));
+            try (
+                    Connection conn = DriverManager.getConnection(URL, USER, PASSWORD))
+            {
+                runner.update(conn, insertUser,
+                        user.getId(),
+                        user.getLogin(),
+                        user.getPassword(),
+                        user.getStatus());
+                runner.update(conn, insertAuthCode,
+                        authCode.getId(),
+                        authCode.getUserId(),
+                        authCode.getCode(),
+                        authCode.getCreated());
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
-    public static String getUserAuthCodeById(String id) throws SQLException {
-        String usersSQL = String.format("SELECT * FROM auth_codes WHERE user_id='%s' ORDER BY created DESC;", id);
-        QueryRunner runner = new QueryRunner();
+    public static void clearAllTables() {
+        clearCardTransactions();
+        clearCards();
+        clearAuthCodes();
+        clearUsers();
+    }
 
-        try (
-                Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-        ) {
-            AuthCode authCode = runner.query(conn, usersSQL, new BeanHandler<>(AuthCode.class));
-            return authCode.getId();
+    private static void clearUsers() {
+        try {
+            String clearUserTable = "DELETE FROM users";
+            QueryRunner runner = new QueryRunner();
+
+            try (
+                    Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            ) {
+                runner.update(conn, clearUserTable);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    private static void clearAuthCodes() {
+        try {
+            String clearAuthCodes = "DELETE FROM auth_codes";
+            QueryRunner runner = new QueryRunner();
+
+            try (
+                    Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            ) {
+                runner.update(conn, clearAuthCodes);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    private static void clearCards() {
+        try {
+            String clearCards = "DELETE FROM cards";
+            QueryRunner runner = new QueryRunner();
+
+            try (
+                    Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            ) {
+                runner.update(conn, clearCards);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    private static void clearCardTransactions() {
+        try {
+            String clearCards = "DELETE FROM card_transactions";
+            QueryRunner runner = new QueryRunner();
+
+            try (
+                    Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            ) {
+                runner.update(conn, clearCards);
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 }
