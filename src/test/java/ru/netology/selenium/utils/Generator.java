@@ -23,14 +23,6 @@ public class Generator {
         return new User(id, login, password, encryptedPassword, status);
     }
 
-    public static AuthCode createAuthCode(User user) {
-        int id = faker.number().numberBetween(0, 20);
-        String code = faker.number().digits(6);
-        String userCode = user.getId();
-        String created = getDate();
-        return new AuthCode(String.valueOf(id), code, userCode, created);
-    }
-
     public static String createWrongPassword() {
         return String.valueOf(faker.number().numberBetween(0, 20));
     }

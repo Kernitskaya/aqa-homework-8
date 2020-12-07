@@ -6,27 +6,36 @@ public class AuthCode {
     private String userId;
     private String created;
 
-    public AuthCode(String id, String code, String userId, String created) {
-        this.id = id;
-        this.code = code;
-        this.userId = userId;
-        this.created = created;
-    }
-
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getCode() {
         return code;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getCreated() {
         return created;
     }
 
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
     public String getUserId() {
         return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @Override
