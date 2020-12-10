@@ -1,16 +1,11 @@
 package ru.netology.selenium.utils;
 
 import com.github.javafaker.Faker;
-import ru.netology.selenium.domain.AuthCode;
 import ru.netology.selenium.domain.User;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Generator {
 
     private static Faker faker = new Faker();
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private Generator() {}
 
@@ -26,10 +21,4 @@ public class Generator {
     public static String createWrongPassword() {
         return String.valueOf(faker.number().numberBetween(0, 20));
     }
-
-    private static String getDate() {
-        LocalDateTime now = LocalDateTime.now();
-        return dateTimeFormatter.format(now);
-    }
-
 }

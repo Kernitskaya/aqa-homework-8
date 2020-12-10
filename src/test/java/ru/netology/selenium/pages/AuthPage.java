@@ -34,7 +34,7 @@ public class AuthPage {
     }
 
     public void checkWrongAuthNotification() {
-        wrongAuthNotification.shouldHave(text("Неверно указан логин или пароль"));
+        wrongAuthNotification.shouldHave(text("Пользователь заблокирован!"));
     }
 
     public static AuthPage newInstance() {
